@@ -73,7 +73,7 @@ class HyperXception(hypermodel.HyperModel):
 
         # Initial conv2d.
         conv2d_num_filters = hp.Choice(
-            'conv2d_num_filters', [32, 64, 128], default=64)
+            'conv2d_num_filters', [16, 32, 64, 128], default=64)
         kernel_size = hp.Choice('kernel_size', [3, 5])
         initial_strides = hp.Choice('initial_strides', [2])
         x = conv(x,
@@ -84,7 +84,7 @@ class HyperXception(hypermodel.HyperModel):
 
         # Separable convs.
         sep_num_filters = hp.Int(
-            'sep_num_filters', 128, 768, step=128, default=256)
+            'sep_num_filters', 128, 384, step=128, default=256)
         num_residual_blocks = hp.Int('num_residual_blocks', 2, 8, default=4)
         for _ in range(num_residual_blocks):
             x = residual(x,
@@ -97,7 +97,7 @@ class HyperXception(hypermodel.HyperModel):
                      activation=activation,
                      max_pooling=True)
 
-        pooling = hp.Choice('pooling', ['avg', 'flatten', 'max'])
+        pooling = hp.Choice('pooling', ['avg'])
         if pooling == 'flatten':
             x = layers.Flatten()(x)
         elif pooling == 'avg':
